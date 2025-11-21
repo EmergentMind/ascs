@@ -1,0 +1,28 @@
+# Devenv
+.devenv*
+devenv.local.nix
+devenv.local.yaml
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml
+
+# From build command testing
+result
+*.iso
+
+#node
+node_modules
+
+# Backup files for temporary changes
+*.bk
+*.bkp
+
+# secrets
+.git-crypt.key
+
+# Misc
+tmp
+
