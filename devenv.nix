@@ -7,13 +7,21 @@
   # https://devenv.sh/packages/
   packages = [ 
       pkgs.git
-      pkgs.python312
-      pkgs.python312Packages.fastapi
-      pkgs.python312Packages.uvicorn # The ASGI server to run FastAPI
   ];
 
   # https://devenv.sh/languages/
-  languages.python.enable = true;
+  languages.python = {
+    enable = true;
+    version = "3.12";
+    directory = "./backend";
+    venv.enable = true;
+    venv.requirements = ''
+      fastapi
+      fastapi-cli
+      uvicorn
+      python-multipart
+    '';
+  };
 
   enterShell = ''
     echo "Ascendancy: Seasonal Campaign System devenv"
