@@ -1,6 +1,8 @@
-from fastapi import FastAPI, Path, Form
+from app.core.database import get_session
 
-from sqlmodel import Field, SQLModel
+from fastapi import FastAPI, Path, Depends, Query
+
+from sqlmodel import Field, SQLModel, Session, select 
 from typing import Optional, Annotated
 from enum import Enum
 
@@ -17,50 +19,34 @@ class Vision(SQLModel, table=True):
     description: str | None = Field (
             default= None, title="Vision Description", max_length=300
             )
-class ThreeYearOutlook(SQLModel, table=True):
+class Outlook(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     start_year: int = Field(gt=0, description="The year that your current Three Year Outlook began.")
     notes: str | None = Field (
             default= None, title="Notes", max_length=300
             )
 
+SessionDep = Annotated[Session, Depends(get_session)]
+
 app = FastAPI()
 
-temp_vision_db = [
-        {
-            "vision_id": 1,
-            "title": "Bob's Vision",
-            "description": "My vision for persueing my dreams" 
-            }, 
-        {
-            "vision_id": 2,
-            "title": "Alice's Vision",
-            "description":"My vision for being a great mother and spouse"
-            }
-        ]
-
-temp_outlook_db = [
-        {
-            "outlook_id": 1,
-            "start_year": 2025,
-            "notes": "Read War and Peace"
-            },
-        {
-            "outlook_id": 2,
-            "start_year": 2023,
-            "notes": "build shed"
-            }       
-        ]
-
-
 # vision
-@app.get("/visions", tags=[Tags.visions])
-async def read_visions():
-    return temp_vision_db
+@app.get("/visions/", tags=[Tags.visions])
+async def read_visions(
+        session: SessionDep,
+        offset: int = 0,
+        limit: Annotated[int, Query(le=100)] = 100,
+        ):
+    visions = session.exec(select(Vision).offset(offset).limit(limit)).all()
+    return visions
 
 @app.get("/visions/{vision_id}", tags=[Tags.visions])
-async def read_vision(vision_id: Annotated[int, Path(title="The id of the vision to get")]):
-    return temp_vision_db[vision_id]
+async def read_vision(
+        vision_id: Annotated[int, Path(title="The id of the vision to get")],
+        session: SessionDep
+        ):
+    vision = session.get(Vision, vision_id)
+    return vision
 
 @app.post(
         "/visions/",
@@ -68,32 +54,46 @@ async def read_vision(vision_id: Annotated[int, Path(title="The id of the vision
         tags=[Tags.visions],
         summary="Create a new vision",
         )
-async def create_vision(vision: Vision) -> Vision:
+async def create_vision(vision: Vision, session: SessionDep) -> Vision:
     """
     Create a vision with all of the information:
     - TODO
     """    
+    session.add(vision)
+    session.commit()
+    session.refresh(vision)
     return vision
 
-# three year outlook
-@app.get("/outlooks", tags=[Tags.outlooks])
-async def read_three_year_outlooks():
-    return temp_outlook_db
+# outlook
+@app.get("/outlooks/", tags=[Tags.outlooks])
+async def read_outlooks(
+        session: SessionDep,
+        offset: int = 0,
+        limit: Annotated[int, Query(le=100)] = 100,
+        ):
+    outlooks = session.exec(select(Outlook).offset(offset).limit(limit)).all()
+    return outlooks
 
 @app.get("/outlooks/{outlook_id}", tags=[Tags.outlooks])
-async def read_three_year_outlook(outlook_id: int):
-    return temp_outlook_db[outlook_id]
+async def read_outlook(
+        outlook_id: Annotated[int, Path(title="The id of the outlook to get")],
+        session: SessionDep
+        ):
+    outlook = session.get(Outlook, outlook_id)
+    return outlook
 
 @app.post(
         "/outlooks/",
-        response_model=ThreeYearOutlook,
+        response_model=Outlook,
         tags=[Tags.outlooks],
-        summary="Create a new three year outlook",
+        summary="Create a new outlook",
         )
-async def create_outlook(outlook: ThreeYearOutlook) -> ThreeYearOutlook:
+async def create_outlook(outlook: Outlook, session: SessionDep) -> Outlook:
     """
-    Create a three year outlook with all of the information:
+    Create a outlook with all of the information:
     - TODO
-    """
+    """    
+    session.add(outlook)
+    session.commit()
+    session.refresh(outlook)
     return outlook
-
