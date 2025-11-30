@@ -2,29 +2,10 @@ from app.core.database import get_session
 
 from fastapi import FastAPI, Path, Depends, Query
 
-from sqlmodel import Field, SQLModel, Session, select 
-from typing import Optional, Annotated
-from enum import Enum
+from sqlmodel import Session, select 
+from typing import Annotated
 
-# temp models
-class Tags(Enum):
-    visions = "visions"
-    outlooks = "outlooks"
-    seasons = "seasons"
-    users = "users"
-
-class Vision(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    title: str = Field(default="Aspirational Vision")
-    description: str | None = Field (
-            default= None, title="Vision Description", max_length=300
-            )
-class Outlook(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
-    start_year: int = Field(gt=0, description="The year that your current Three Year Outlook began.")
-    notes: str | None = Field (
-            default= None, title="Notes", max_length=300
-            )
+from app.models import Tags, Vision, Outlook
 
 SessionDep = Annotated[Session, Depends(get_session)]
 
