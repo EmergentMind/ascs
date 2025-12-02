@@ -19,6 +19,7 @@
     directory = "./backend/app";
     venv.enable = true;
     venv.requirements = ''
+      coverage
       debugpy
       fastapi
       fastapi-cli
