@@ -10,6 +10,8 @@ def test_create_outlook(
             f"/outlooks/",
             json=data,
             )
+
+    assert response.status_code == 200
     content = response.json()
     assert content["start_year"] == data["start_year"]
     assert "id" in content
@@ -22,6 +24,20 @@ def test_read_outlook(
     response = client.get(
             f"/outlooks/{outlook.id}",
             )
+
+    assert response.status_code == 200
     content = response.json()
     assert content["start_year"] == outlook.start_year
+
+def test_read_outlook_not_found(
+        client: TestClient,
+        ) -> None:
+    #NOTE: we can replace this when we use UUIDs for id
+    non_existent_id = 999999
+    response = client.get(
+            f"/outlooks/{non_existent_id}",
+            )
+    assert response.status_code == 404
+    content = response.json()
+    assert content["detail"] == "Item not found"
 

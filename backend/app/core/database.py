@@ -16,7 +16,8 @@ if database_host.startswith("/"):
 else:
     postgresql_url = f"postgresql://{database_user}:{database_password}@{database_host}:{database_port}/{database_name}"
 
-engine = create_engine(postgresql_url, echo=True) #NOTE: echo=True is only on for learning
+#NOTE: echo=True is only on for learning
+engine = create_engine(postgresql_url, echo=True)
 
 def init_database():
     SQLModel.metadata.create_all(engine)

@@ -27,3 +27,14 @@ def test_read_vision(
     assert content["title"] == vision.title
     assert content["description"] == vision.description
 
+def test_read_vision_not_found(
+        client: TestClient,
+        ) -> None:
+    non_existent_id = 999999
+    response = client.get(
+            f"/visions/{non_existent_id}",
+            )
+    assert response.status_code == 404
+    content = response.json()
+    assert content["detail"] == "Item not found"
+
