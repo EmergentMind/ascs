@@ -1,12 +1,11 @@
 ## REMINDERS
 - Leverage devenv up at the start of each day; it guarantees the same services you used when you wrote the checklist.
-- Run the CI locally (act or nix develop .#backend --command pytest) before pushing, to keep the remote pipeline green.
+- Run the CI locally (nix develop .#backend --command pytest) before pushing, to keep the remote pipeline green.
 
 ## USAGE
+1. `devenv up` to rebuild environment spin up database
+2. From a different shell, run `fastapi dev backend/main.py` to spin up dev server for tutorial and testing. devenv automation later
 
-### FastAPI
-
-From the devenv shell, run `fastapi dev backend/main.py` to spin up dev server for tutorial and testing. devenv automation later
 
 #### Debugging
 - Need to setup python debugger for nvim

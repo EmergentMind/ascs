@@ -1,10 +1,5 @@
-from app.core.database import get_session
-
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from sqlmodel import Session 
-from typing import Annotated
 
 from app.api.main import api_router 
 

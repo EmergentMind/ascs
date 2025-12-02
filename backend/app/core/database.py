@@ -5,20 +5,20 @@ from sqlmodel import SQLModel, Session, create_engine
 
 # Define variables to handle the way devenv sets up postgres
 # TODO: look into modifying how devenv spins up postgresql 
-db_user = os.getenv("PGSUSER", getpass.getuser())
-db_password = os.getenv("PGSPASSWORD", "")
-db_host = os.getenv("PGHOST", "localhost")
-db_port = os.getenv("PGPORT", "5432")
-db_name = os.getenv("PGDATABASE", "ascs_db")
+database_user = os.getenv("PGSUSER", getpass.getuser())
+database_password = os.getenv("PGSPASSWORD", "")
+database_host = os.getenv("PGHOST", "localhost")
+database_port = os.getenv("PGPORT", "5432")
+database_name = os.getenv("PGDATABASE", "ascs_db")
 
-if db_host.startswith("/"):
-    postgresql_url = f"postgresql://{db_user}:{db_password}@/{db_name}?host={db_host}"
+if database_host.startswith("/"):
+    postgresql_url = f"postgresql://{database_user}:{database_password}@/{database_name}?host={database_host}"
 else:
-    postgresql_url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+    postgresql_url = f"postgresql://{database_user}:{database_password}@{database_host}:{database_port}/{database_name}"
 
 engine = create_engine(postgresql_url, echo=True) #NOTE: echo=True is only on for learning
 
-def create_db_and_tables():
+def init_database():
     SQLModel.metadata.create_all(engine)
 
 def get_session():

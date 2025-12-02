@@ -13,15 +13,31 @@ class Tags(Enum):
 
 # ========= Vision Layer ========= 
 
-class Vision(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+# Shared
+class VisionBase(SQLModel):
     title: str = Field(default="Aspirational Vision")
     description: str | None = Field (
             default= None, title="Vision Description", max_length=300
             )
+# Properties to receive on vision creation
+class VisionCreate(VisionBase):
+    pass
+
+# Database model, table inferred from class name
+class Vision(VisionBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+
 
 # ========= Outlook Layer ========= 
 
-class Outlook(SQLModel, table=True):
-    id: Optional[int] = Field(default=None, primary_key=True)
+# Shared
+class OutlookBase(SQLModel):
     start_year: int = Field(gt=0, description="The year that your current Three Year Outlook began.")
+
+# Properties to receive on outlook creation
+class OutlookCreate(OutlookBase):
+    pass
+
+# Database model, table inferred from class name
+class Outlook(OutlookBase, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
