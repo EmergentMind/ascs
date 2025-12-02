@@ -8,12 +8,12 @@ Develop a fullstack CRUD app, using minimal AI, that fills a gap in my personal 
 
 ## Intended Stack
 
-**Backend:** FastAPI + PostreSQL via SQLModel
-**Frontend Web:** React + Vite
-**Frontend Mobile:** React-Native
-**NeoVim Plugin:** Lua
-**TUI**: Rust
-**DevOps** Nix, devenv, Github actions, Caddy
+- **Backend:** FastAPI + PostreSQL via SQLModel
+- **Frontend Web:** React + Vite
+- **Frontend Mobile:** React-Native
+- **NeoVim Plugin:** Lua
+- **TUI**: Rust
+- **DevOps** Nix, devenv, Github actions, Caddy
 
 ## Issue Tracking and TODOs
 
