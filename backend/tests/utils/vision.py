@@ -9,4 +9,3 @@ def create_random_vision(database: Session) -> Vision:
     description = random_lower_string()
     vision_in = VisionCreate(title=title, description=description)
     return crud.create_vision(session=database, vision_in=vision_in)
-
