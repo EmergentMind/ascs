@@ -15,7 +15,7 @@ class Tags(Enum):
 
 # Shared
 class VisionBase(SQLModel):
-    title: str = Field(default="Aspirational Vision")
+    title: str = Field(default="Aspirational Vision", min_length=1, max_length=200)
     description: str | None = Field (
             default= None, title="Vision Description", max_length=300
             )
@@ -32,7 +32,7 @@ class VisionPublic(VisionBase):
     id: int
 
 class VisionsPublic(SQLModel):
-    id: list[VisionPublic]
+    data: list[VisionPublic]
     count: int
 
 # ========= Outlook Layer ========= 
@@ -54,5 +54,5 @@ class OutlookPublic(OutlookBase):
     id: int
 
 class OutlooksPublic(SQLModel):
-    id: list[OutlookPublic]
+    data: list[OutlookPublic]
     count: int
