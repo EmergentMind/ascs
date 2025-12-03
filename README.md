@@ -15,6 +15,15 @@ Develop a fullstack CRUD app, using minimal AI, that fills a gap in my personal 
 - **TUI**: Rust
 - **DevOps** Nix, devenv, Github actions, Caddy
 
+## Requirements
+- [devenv](https://devenv.sh/) - See [getting started](https://devenv.sh/getting-started/) for installation.
+
+## Dev Workflow
+
+Dependencies are primarily managed devenv in `devenv.nix` where you can add `pip` packages, and other tools as needed.
+
+Run `devenv up` to start processes and services.
+
 ## Issue Tracking and TODOs
 
 This repository tracks and prioritizes issues using GitHub Projects
