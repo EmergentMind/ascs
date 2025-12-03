@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 
-from app.api.routes import visions, outlooks
+from app.api.visions import visions
+from app.api.outlooks import outlooks
 
 api_router = APIRouter()
 

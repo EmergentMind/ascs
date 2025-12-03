@@ -1,41 +1,39 @@
 from fastapi.testclient import TestClient
 from sqlmodel import Session
 
-from tests.utils.outlook import create_random_outlook
+from test_utils.vision import create_random_vision
 
-def test_create_outlook(
+def test_create_vision(
         client: TestClient,) -> None:
-    data = {"start_year": 2025}
+    data = {"title": "Foo", "description": "Bar"}
     response = client.post(
-            f"/outlooks/",
+            f"/visions/",
             json=data,
             )
-
-    assert response.status_code == 200
     content = response.json()
-    assert content["start_year"] == data["start_year"]
+    assert content["title"] == data["title"]
+    assert content["description"] == data["description"]
     assert "id" in content
 
-def test_read_outlook(
+def test_read_vision(
         client: TestClient,
         database: Session,
         ) -> None:
-    outlook = create_random_outlook(database)
+    vision = create_random_vision(database)
     response = client.get(
-            f"/outlooks/{outlook.id}",
+            f"/visions/{vision.id}",
             )
-
-    assert response.status_code == 200
     content = response.json()
-    assert content["start_year"] == outlook.start_year
+    assert content["title"] == vision.title
+    assert content["description"] == vision.description
 
-def test_read_outlook_not_found(
+def test_read_vision_not_found(
         client: TestClient,
         ) -> None:
     #NOTE: we can replace this when we use UUIDs for id
     non_existent_id = 999999
     response = client.get(
-            f"/outlooks/{non_existent_id}",
+            f"/visions/{non_existent_id}",
             )
     assert response.status_code == 404
     content = response.json()
