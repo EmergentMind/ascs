@@ -1,13 +1,14 @@
 from fastapi.testclient import TestClient
 from sqlmodel import Session
 
+from app.core.config import settings
 from test_utils.vision import create_random_vision
 
 def test_create_vision(
         client: TestClient,) -> None:
     data = {"title": "Foo", "description": "Bar"}
     response = client.post(
-            f"/visions/",
+            f"{settings.API_V1_STR}/visions/",
             json=data,
             )
     content = response.json()
@@ -21,7 +22,7 @@ def test_read_vision(
         ) -> None:
     vision = create_random_vision(database)
     response = client.get(
-            f"/visions/{vision.id}",
+            f"{settings.API_V1_STR}/visions/{vision.id}",
             )
     content = response.json()
     assert content["title"] == vision.title
@@ -33,7 +34,7 @@ def test_read_vision_not_found(
     #NOTE: we can replace this when we use UUIDs for id
     non_existent_id = 999999
     response = client.get(
-            f"/visions/{non_existent_id}",
+            f"{settings.API_V1_STR}/visions/{non_existent_id}",
             )
     assert response.status_code == 404
     content = response.json()
